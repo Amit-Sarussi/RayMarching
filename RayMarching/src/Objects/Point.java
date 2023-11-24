@@ -10,6 +10,10 @@ public class Point {
         this.y = y;
     }
 
+    public Point(Point other){
+        this.x = other.getX();
+        this.y = other.getY();
+    }
     
     public double getX() {
         return x;
@@ -30,5 +34,12 @@ public class Point {
     @Override
     public String toString(){
         return x + ", " + y;
+    }
+
+    public double dist(Point other){
+        return Math.sqrt(
+            Math.pow((other.getX() - x),2) + 
+            Math.pow((other.getY() - y),2)
+        );
     }
 }
