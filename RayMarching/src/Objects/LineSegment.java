@@ -25,4 +25,9 @@ public class LineSegment {
     public void setP2(Point p2) {
         this.p2 = p2;
     }
+
+    @Override
+    public String toString(){
+        return p1.toString() + " -> " + p2.toString();
+    }
 }

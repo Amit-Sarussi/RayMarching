@@ -10,10 +10,18 @@ public class Calc {
         Point l1 = line.getP1();
         Point l2 = line.getP2();
 
-        double ogM = (l1.getY()-l2.getY())/(l1.getX()-l2.getX());
+        double ogM;
+        if ((l1.getX()-l2.getX()) == 0) ogM = 999999999;
+        else ogM = (l1.getY()-l2.getY())/(l1.getX()-l2.getX());
         double ogB = Line.calcB(l1, ogM);
 
-        double pM = -1/ogM;
+        double pM;
+        if (ogM != 0){
+            pM = -1/ogM;
+        }else {
+            pM = 999999999;
+        }
+        
         double pB = Line.calcB(p, pM);
 
         
@@ -48,16 +56,21 @@ public class Calc {
 
     }
 
-    public static double castRay(Point cam, Point nearPlanePoint, World w, int precision){
+    public static boolean castRay(Point cam, Point nearPlanePoint, World w, int precision){
         Point currentP = new Point(nearPlanePoint);
         double smDist = -1;
         for (int i = 0; i < precision; i++){
             smDist = findClosestDist(currentP, w);
-            double t = smDist / cam.dist(nearPlanePoint);
-            currentP.setX((1-t)*cam.getX()+t*nearPlanePoint.getX());
-            currentP.setY((1-t)*cam.getY() + t*nearPlanePoint.getY());
-            System.out.println(currentP.toString() + ", Dist: " + smDist);
+            Point dir = new Point(currentP.getX() - cam.getX(), currentP.getY() - cam.getY());
+            double magnitude = Math.sqrt(
+                Math.pow(dir.getX(),2) + 
+                Math.pow(dir.getY(),2)
+            );
+            Point unitDir = new Point(dir.getX() / magnitude, dir.getY() / magnitude);
+            currentP.setX(currentP.getX() + smDist*unitDir.getX());
+            currentP.setY(currentP.getY() + smDist*unitDir.getY());
+            // System.out.println(currentP.toString() + ", Dist: " + smDist);
         }
-        return smDist;
+        return smDist < 0.01;
     }
 }

@@ -33,7 +33,7 @@ public class Point {
 
     @Override
     public String toString(){
-        return x + ", " + y;
+        return "(" + x + ", " + y + ")";
     }
 
     public double dist(Point other){
@@ -41,5 +41,10 @@ public class Point {
             Math.pow((other.getX() - x),2) + 
             Math.pow((other.getY() - y),2)
         );
+    }
+
+    public Point moveAlongAngle(double angle, double dist) {
+        double radians = Math.toRadians(angle);
+        return new Point(this.x + dist*Math.cos(radians), this.y + dist*Math.sin(radians));
     }
 }
