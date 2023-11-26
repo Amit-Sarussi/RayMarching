@@ -6,6 +6,9 @@ import RayCalculate.Calc;
 import RayCalculate.Camera;
 import WorldSpace.World;
 
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
 public class Main {
     public static void main(String[] args) {
         Frame f = new Frame(800, 800);
@@ -43,21 +46,17 @@ public class Main {
         World w = new World(ls);
         Camera cam = new Camera(new Point(0,0), 0.1, 4);
 
-        int j = 0;
+        
         while (true){
-            j++;
-            j %= 360;
-            cam.setAngle(j);
-            System.out.println(j);
-
+            double angle = cam.getAngle();
             double[] view = new double[800];
 
-            Point mid = cam.getCameraPoint().moveAlongAngle(j, cam.getNearPlaneDist());
+            Point mid = cam.getCameraPoint().moveAlongAngle(angle, cam.getNearPlaneDist());
     
             for (int i = 0; i<800; i++){
                 view[i] = Calc.castRay(
-                    cam.getCameraPoint().moveAlongAngle(j+90, (double)  (i-400)*cam.getNearPlaneWidth()/ (double) 400), 
-                    mid.moveAlongAngle(j+90, (double)  (i-400)*cam.getNearPlaneWidth()/ (double) 400), 
+                    cam.getCameraPoint().moveAlongAngle(angle+90, (double)  (i-400)*cam.getNearPlaneWidth()/ (double) 400), 
+                    mid.moveAlongAngle(angle+90, (double)  (i-400)*cam.getNearPlaneWidth()/ (double) 400), 
                     w, 20
                 );
             }
@@ -68,6 +67,42 @@ public class Main {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+
+            f.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                }
+        
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyChar() == 'd'){
+                        cam.getCameraPoint().setY(cam.getCameraPoint().getY()+0.01);
+                        cam.setCameraPoint(cam.getCameraPoint());
+                    }
+                    else if (e.getKeyChar() == 'w'){
+                        cam.getCameraPoint().setX(cam.getCameraPoint().getX()+0.01);
+                        cam.setCameraPoint(cam.getCameraPoint());
+                    }
+                    else if (e.getKeyChar() == 'a'){
+                        cam.getCameraPoint().setY(cam.getCameraPoint().getY()-0.01);
+                        cam.setCameraPoint(cam.getCameraPoint());
+                    }
+                    else if (e.getKeyChar() == 's'){
+                        cam.getCameraPoint().setX(cam.getCameraPoint().getX()-0.01);
+                        cam.setCameraPoint(cam.getCameraPoint());
+                    }
+                    if (e.getKeyCode() == 39){
+                        cam.setAngle(cam.getAngle()+0.01);
+                    }
+                    else if (e.getKeyCode() == 37){
+                        cam.setAngle(cam.getAngle()-0.01);
+                    }
+                }
+        
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
         }
         
     }

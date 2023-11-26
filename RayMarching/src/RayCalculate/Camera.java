@@ -40,5 +40,9 @@ public class Camera {
     public double getNearPlaneDist() {
         return nearPlaneDist;
     }
+
+    public void setCameraPoint(Point cameraPoint) {
+        this.cameraPoint = cameraPoint;
+    }
     
 }
