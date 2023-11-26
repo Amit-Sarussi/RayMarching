@@ -56,7 +56,7 @@ public class Calc {
 
     }
 
-    public static boolean castRay(Point cam, Point nearPlanePoint, World w, int precision){
+    public static double castRay(Point cam, Point nearPlanePoint, World w, int precision){
         Point currentP = new Point(nearPlanePoint);
         double smDist = -1;
         for (int i = 0; i < precision; i++){
@@ -71,6 +71,6 @@ public class Calc {
             currentP.setY(currentP.getY() + smDist*unitDir.getY());
             // System.out.println(currentP.toString() + ", Dist: " + smDist);
         }
-        return smDist < 0.01;
+        return smDist < 0.01 ? cam.dist(currentP) : -1;
     }
 }
